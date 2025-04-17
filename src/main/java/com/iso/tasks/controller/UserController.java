@@ -1,9 +1,7 @@
 package com.iso.tasks.controller;
 
-import com.iso.tasks.model.User;
 import com.iso.tasks.model.dto.UserCreateDTO;
 import com.iso.tasks.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity createUser(@RequestBody UserCreateDTO userCreateDTO) {
+    public ResponseEntity<String> createUser(@RequestBody UserCreateDTO userCreateDTO) {
         return userService.createUser(userCreateDTO);
     }
 

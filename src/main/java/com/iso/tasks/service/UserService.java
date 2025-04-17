@@ -22,12 +22,12 @@ public class UserService {
         this.encoder = encoder;
     }
 
-    public ResponseEntity createUser(UserCreateDTO userCreateDTO) {
+    public ResponseEntity<String> createUser(UserCreateDTO userCreateDTO) {
         final var username = userCreateDTO.getUsername();
         final Optional<User> dbUser = userRepository.findByUsername(username);
 
         if (dbUser.isPresent()) {
-            return new ResponseEntity(HttpStatus.CONFLICT);
+            return new ResponseEntity<String>("CONFLICT: User already exists", HttpStatus.CONFLICT);
         }
 
         final String password = encoder.encode(userCreateDTO.getPassword());
@@ -40,6 +40,6 @@ public class UserService {
 
         userRepository.save(newUser);
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<String>("User created successfully", HttpStatus.CREATED);
     }
 }
