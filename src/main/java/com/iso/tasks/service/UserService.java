@@ -27,7 +27,7 @@ public class UserService {
         final Optional<User> dbUser = userRepository.findByUsername(username);
 
         if (dbUser.isPresent()) {
-            return new ResponseEntity<String>("CONFLICT: User already exists", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("CONFLICT: User already exists", HttpStatus.CONFLICT);
         }
 
         final String password = encoder.encode(userCreateDTO.getPassword());
@@ -40,6 +40,6 @@ public class UserService {
 
         userRepository.save(newUser);
 
-        return new ResponseEntity<String>("User created successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
     }
 }
