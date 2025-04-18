@@ -48,14 +48,11 @@ public class TasksListsController {
 
     @DeleteMapping("/{listId}")
     public ResponseEntity<TasksList> deleteList(Authentication authentication, @PathVariable(name = "listId") long listId) {
-        Optional<TasksList> list = tasksListService
+        Optional<TasksList> listOptional = tasksListService
                 .deleteList(Long.parseLong(authentication.getName()), listId);
 
-        if (list.isPresent()) {
-            return new ResponseEntity<>(list.get(), HttpStatusCode.valueOf(200));
-        }
-        else {
-            return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
-        }
+        return listOptional
+                .map(tasksList -> new ResponseEntity<>(tasksList, HttpStatusCode.valueOf(200)))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatusCode.valueOf(404)));
     }
 }

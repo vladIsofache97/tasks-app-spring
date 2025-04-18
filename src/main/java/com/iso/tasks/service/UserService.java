@@ -3,8 +3,6 @@ package com.iso.tasks.service;
 import com.iso.tasks.model.User;
 import com.iso.tasks.model.dto.UserCreateDTO;
 import com.iso.tasks.repository.UserRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

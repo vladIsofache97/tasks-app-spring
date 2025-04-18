@@ -46,8 +46,8 @@ public class TasksListService {
         if (listInDb.isEmpty() || listInDb.get().getUserId() != userId) {
             return Optional.empty();
         }
-         tasksListRepository.deleteById(listId);
 
-        return Optional.of(listInDb.get());
+        tasksListRepository.deleteById(listId);
+        return listInDb;
     }
 }

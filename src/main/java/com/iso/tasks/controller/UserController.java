@@ -2,7 +2,6 @@ package com.iso.tasks.controller;
 
 import com.iso.tasks.model.dto.UserCreateDTO;
 import com.iso.tasks.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

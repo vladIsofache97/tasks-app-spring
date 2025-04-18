@@ -11,5 +11,5 @@ import java.util.List;
 public interface TasksListRepository extends CrudRepository<TasksList, Long> {
 
     @Query("select l from lists l where l.userId = ?1")
-    public List<TasksList> getUserLists(long userId);
+    List<TasksList> getUserLists(long userId);
 }
