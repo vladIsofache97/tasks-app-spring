@@ -22,6 +22,10 @@ public class UserService {
         this.encoder = encoder;
     }
 
+    public Long getUserId(String username) {
+        return userRepository.getId(username);
+    }
+
     public ResponseEntity<String> createUser(UserCreateDTO userCreateDTO) {
         final var username = userCreateDTO.getUsername();
         final Optional<User> dbUser = userRepository.findByUsername(username);

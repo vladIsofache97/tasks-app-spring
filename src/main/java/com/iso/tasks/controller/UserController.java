@@ -38,6 +38,8 @@ public class UserController {
         Instant now = Instant.now();
         long expiry = 36000L;
 
+        Long uid = userService.getUserId(authentication.getName());
+
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
@@ -45,7 +47,7 @@ public class UserController {
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiry))
-                .subject(authentication.getName())
+                .subject(uid.toString())
                 .claim("scope", scope)
                 .build();
 
