@@ -2,6 +2,8 @@ package com.iso.tasks.controller;
 
 import com.iso.tasks.model.dto.UserCreateDTO;
 import com.iso.tasks.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,7 +32,12 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody UserCreateDTO userCreateDTO) {
-        return userService.createUser(userCreateDTO);
+        if (userService.createUser(userCreateDTO)) {
+            return new ResponseEntity<>("User created successfully", HttpStatusCode.valueOf(201));
+        }
+        else {
+            return new ResponseEntity<>("CONFLICT: User already exists", HttpStatusCode.valueOf(409));
+        }
     }
 
     @PostMapping("/login")
