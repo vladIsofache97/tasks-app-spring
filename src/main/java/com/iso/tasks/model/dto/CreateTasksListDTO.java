@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TasksListDTO {
+public class CreateTasksListDTO {
     private String title;
 }

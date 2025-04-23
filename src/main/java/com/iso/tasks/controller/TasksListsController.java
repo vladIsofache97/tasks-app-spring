@@ -1,14 +1,11 @@
 package com.iso.tasks.controller;
 
-import com.iso.tasks.model.TasksList;
-import com.iso.tasks.model.dto.TasksListDTO;
+import com.iso.tasks.model.dto.CreateTasksListDTO;
+import com.iso.tasks.model.dto.PublicTaskListDTO;
 import com.iso.tasks.service.TasksListService;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/lists")
@@ -21,35 +18,30 @@ public class TasksListsController {
     }
 
     @GetMapping("")
-    public Iterable<TasksList> getLists(Authentication authentication) {
+    public Iterable<PublicTaskListDTO> getLists(Authentication authentication) {
         return tasksListService.getAllLists(Long.parseLong(authentication.getName()));
     }
 
     @PostMapping("")
-    public TasksList createList(Authentication authentication, @RequestBody TasksListDTO tasksListDTO) {
-        return tasksListService.createList(tasksListDTO.getTitle(), Long.parseLong(authentication.getName()));
+    public PublicTaskListDTO createList(Authentication authentication,
+                                        @RequestBody CreateTasksListDTO createTasksListDTO) {
+        return tasksListService
+                .createList(createTasksListDTO.getTitle(), Long.parseLong(authentication.getName()));
     }
 
     @PatchMapping("/{listId}")
-    public ResponseEntity<TasksList> changeListTitle(Authentication authentication,
-                                          @PathVariable(name = "listId") long listId,
-                                          @RequestBody TasksListDTO tasksListDTO) {
-        Optional<TasksList> listOptional = tasksListService
-                .changeListTitle(listId, tasksListDTO.getTitle(), Long.parseLong(authentication.getName()));
-
-        return listOptional
-                .map(tasksList -> new ResponseEntity<>(tasksList, HttpStatusCode.valueOf(200)))
-                .orElseGet(() -> new ResponseEntity<>(null, HttpStatusCode.valueOf(404)));
+    public ResponseEntity<PublicTaskListDTO> changeListTitle(Authentication authentication,
+                                                             @PathVariable(name = "listId") long listId,
+                                                             @RequestBody CreateTasksListDTO createTasksListDTO) {
+        return tasksListService
+                .changeListTitle(listId, createTasksListDTO.getTitle(), Long.parseLong(authentication.getName()));
 
     }
 
     @DeleteMapping("/{listId}")
-    public ResponseEntity<TasksList> deleteList(Authentication authentication, @PathVariable(name = "listId") long listId) {
-        Optional<TasksList> listOptional = tasksListService
+    public ResponseEntity<PublicTaskListDTO> deleteList(Authentication authentication,
+                                                        @PathVariable(name = "listId") long listId) {
+        return tasksListService
                 .deleteList(Long.parseLong(authentication.getName()), listId);
-
-        return listOptional
-                .map(tasksList -> new ResponseEntity<>(tasksList, HttpStatusCode.valueOf(200)))
-                .orElseGet(() -> new ResponseEntity<>(null, HttpStatusCode.valueOf(404)));
     }
 }

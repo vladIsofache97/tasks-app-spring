@@ -1,7 +1,10 @@
 package com.iso.tasks.service;
 
 import com.iso.tasks.model.TasksList;
+import com.iso.tasks.model.dto.PublicTaskListDTO;
 import com.iso.tasks.repository.TasksListRepository;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,38 +19,39 @@ public class TasksListService {
         this.tasksListRepository = tasksListRepository;
     }
 
-    public List<TasksList> getAllLists(long userId) {
-        return tasksListRepository.getUserLists(userId);
+    public List<PublicTaskListDTO> getAllLists(long userId) {
+        return tasksListRepository.findAllByUserId(userId).stream().map(PublicTaskListDTO::from).toList();
     }
 
-    public TasksList createList(String title, long userId) {
-        return tasksListRepository
-                .save(TasksList.builder()
+    public PublicTaskListDTO createList(String title, long userId) {
+        return PublicTaskListDTO.from(
+                tasksListRepository.save(TasksList
+                        .builder()
                         .title(title)
                         .userId(userId)
-                        .build());
+                        .build()));
     }
 
-    public Optional<TasksList> changeListTitle(long listId, String title, long userId) {
-        Optional<TasksList> listInDb = tasksListRepository.findById(listId);
-        if (listInDb.isEmpty() || listInDb.get().getUserId() != userId) {
-            return Optional.empty();
+    public ResponseEntity<PublicTaskListDTO>  changeListTitle(long listId, String title, long userId) {
+        Optional<TasksList> tasksListInDb = tasksListRepository.findById(listId);
+        if (tasksListInDb.isEmpty() || tasksListInDb.get().getUserId() != userId) {
+            return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
         }
 
-        TasksList list = listInDb.get();
-        list.setTitle(title);
-        tasksListRepository.save(list);
-        return Optional.of(list);
+        TasksList tasksList = tasksListInDb.get();
+        tasksList.setTitle(title);
+        tasksListRepository.save(tasksList);
+        return new ResponseEntity<>(PublicTaskListDTO.from(tasksList), HttpStatusCode.valueOf(200));
     }
 
-    public Optional<TasksList> deleteList(long userId, long listId) {
+    public ResponseEntity<PublicTaskListDTO> deleteList(long userId, long listId) {
 
-        Optional<TasksList> listInDb = tasksListRepository.findById(listId);
-        if (listInDb.isEmpty() || listInDb.get().getUserId() != userId) {
-            return Optional.empty();
+        Optional<TasksList> tasksListInDb = tasksListRepository.findById(listId);
+        if (tasksListInDb.isEmpty() || tasksListInDb.get().getUserId() != userId) {
+            return new ResponseEntity<>(null, HttpStatusCode.valueOf(404));
         }
 
         tasksListRepository.deleteById(listId);
-        return listInDb;
+        return new ResponseEntity<>(PublicTaskListDTO.from(tasksListInDb.get()), HttpStatusCode.valueOf(200));
     }
 }
