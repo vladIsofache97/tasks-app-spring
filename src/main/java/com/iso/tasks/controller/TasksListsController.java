@@ -3,6 +3,7 @@ package com.iso.tasks.controller;
 import com.iso.tasks.model.dto.CreateTasksListDTO;
 import com.iso.tasks.model.dto.PublicTaskListDTO;
 import com.iso.tasks.service.TasksListService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class TasksListsController {
 
     @PostMapping("")
     public PublicTaskListDTO createList(Authentication authentication,
-                                        @RequestBody CreateTasksListDTO createTasksListDTO) {
+                                        @Valid @RequestBody CreateTasksListDTO createTasksListDTO) {
         return tasksListService
                 .createList(createTasksListDTO.getTitle(), Long.parseLong(authentication.getName()));
     }
