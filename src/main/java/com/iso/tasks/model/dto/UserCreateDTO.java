@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserCreateDTO {
 
+    // TODO: Add constraints for username and password
     @NotNull
     private String username;
 

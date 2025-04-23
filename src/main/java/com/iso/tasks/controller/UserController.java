@@ -2,6 +2,7 @@ package com.iso.tasks.controller;
 
 import com.iso.tasks.model.dto.UserCreateDTO;
 import com.iso.tasks.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody UserCreateDTO userCreateDTO) {
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
         if (userService.createUser(userCreateDTO)) {
             return new ResponseEntity<>("User created successfully", HttpStatusCode.valueOf(201));
         }
